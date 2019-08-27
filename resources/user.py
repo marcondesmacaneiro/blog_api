@@ -6,28 +6,31 @@ from flask_jwt_extended import (
 from flask_restful import Resource, reqparse
 from werkzeug.security import safe_str_cmp
 
-from helpers.helper import StringHelper
 from models.user import UserModel
 from redis_server import revoked_store, ACCESS_EXPIRES, REFRESH_EXPIRES
 
-non_empty_string = StringHelper.non_empty_string
+
+def non_empty_string(s):
+    if not s:
+        raise ValueError("Must not be empty string")
+    return s
 
 
 class UserRegister(Resource):
     def post(self):
         _user_parser = reqparse.RequestParser()
         _user_parser.add_argument('name',
-                                  type=str,
+                                  type=non_empty_string,
                                   required=True,
                                   help="This field cannot be left blank!"
                                   )
         _user_parser.add_argument('email',
-                                  type=str,
+                                  type=non_empty_string,
                                   required=True,
                                   help="This field cannot be left blank!"
                                   )
         _user_parser.add_argument('password',
-                                  type=str,
+                                  type=non_empty_string,
                                   required=True,
                                   help="This field cannot be left blank!"
                                   )
@@ -63,16 +66,16 @@ class User(Resource):
 class UserLogin(Resource):
     @classmethod
     def post(cls):
-        _user_parser = reqparse.RequestParser()
+        _user_parser = reqparse.RequestParser(bundle_errors=True)
         _user_parser.add_argument('email',
-                                  type=str,
+                                  type=non_empty_string,
                                   required=True,
-                                  help="This field cannot be left blank!"
+                                  help="The email field is required!"
                                   )
         _user_parser.add_argument('password',
-                                  type=str,
+                                  type=non_empty_string,
                                   required=True,
-                                  help="This field cannot be left blank!"
+                                  help="The password field is required!"
                                   )
         data = _user_parser.parse_args()
         user = UserModel.find_by_email(data['email'])
@@ -86,7 +89,8 @@ class UserLogin(Resource):
 
             return {
                        'access_token': access_token,
-                       'refresh_token': refresh_token
+                       'refresh_token': refresh_token,
+                       'user': user.username()
                    }, 200
         return {'message': 'Invalid Credential'}, 401
 

@@ -11,6 +11,7 @@ from resources.user import UserRegister, User, UserLogin, UserLogout, TokenRefre
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
+app.config['BUNDLE_ERRORS'] = True
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = ACCESS_EXPIRES
 app.config['JWT_REFRESH_TOKEN_EXPIRES'] = REFRESH_EXPIRES
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///data.db')
@@ -21,7 +22,6 @@ app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
 app.secret_key = 'githain'
 api = Api(app)
 jwt = JWTManager(app)
-
 
 
 @app.before_first_request

@@ -21,6 +21,11 @@ class UserModel(db.Model):
             'email': self.email
         }
 
+    def username(self):
+        return {
+            'name': self.name
+        }
+
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
