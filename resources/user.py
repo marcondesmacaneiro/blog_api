@@ -1,21 +1,24 @@
 from flask_restful import Resource, reqparse
 from werkzeug.security import safe_str_cmp
 
+from helpers.helper import StringHelper
 from models.user import UserModel
+
+non_empty_string = StringHelper.non_empty_string
 
 _user_parser = reqparse.RequestParser()
 _user_parser.add_argument('name',
-                          type=str,
+                          type=non_empty_string,
                           required=True,
                           help="This field cannot be left blank!"
                           )
 _user_parser.add_argument('email',
-                          type=str,
+                          type=non_empty_string,
                           required=True,
                           help="This field cannot be left blank!"
                           )
 _user_parser.add_argument('password',
-                          type=str,
+                          type=non_empty_string,
                           required=True,
                           help="This field cannot be left blank!"
                           )
