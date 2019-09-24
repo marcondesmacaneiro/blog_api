@@ -5,23 +5,27 @@ class CategoryModel(db.Model):
     __tablename__ = 'categorys'
 
     id = db.Column(db.Integer, primary_key=True)
-    description = db.Column(db.String(100))
+    name = db.Column(db.String(100))
 
     articles = db.relationship('ArticleModel', lazy="dynamic")
 
-    def __init__(self, description):
-        self.description = description
+    def __init__(self, name):
+        self.name = name
 
     def json(self):
         return {
             'id': self.id,
-            'description': self.description,
+            'name': self.name,
             'articles': [article.json() for article in self.articles.all()]
         }
 
     @classmethod
     def find_by_name(cls, name):
         return cls.query.filter_by(name=name).first()
+
+    @classmethod
+    def find_by_id(cls, _id):
+        return cls.query.filter_by(id=_id).first()
 
     @classmethod
     def find_all(cls):

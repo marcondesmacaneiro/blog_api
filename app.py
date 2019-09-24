@@ -7,6 +7,8 @@ from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 
 from redis_server import revoked_store, ACCESS_EXPIRES, REFRESH_EXPIRES
+from resources.article import Article, ArticleList, UpdateArticle
+from resources.category import Category, CategoryList, UpdateCategory
 from resources.user import UserRegister, User, UserLogin, UserLogout, TokenRefresh
 
 app = Flask(__name__)
@@ -85,6 +87,13 @@ api.add_resource(User, '/user/<int:user_id>')
 api.add_resource(UserLogin, '/auth')
 api.add_resource(UserLogout, '/logout')
 api.add_resource(TokenRefresh, '/refresh')
+
+api.add_resource(Article, '/article')
+api.add_resource(UpdateArticle, '/article/<int:article_id>')
+api.add_resource(ArticleList, '/articles')
+api.add_resource(Category, '/category')
+api.add_resource(UpdateCategory, '/category/<int:category_id>')
+api.add_resource(CategoryList, '/categorys')
 
 if __name__ == '__main__':
     from db import db

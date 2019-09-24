@@ -1,5 +1,6 @@
 from db import db
 
+
 class ArticleModel(db.Model):
     __tablename__ = 'articles'
 
@@ -26,3 +27,22 @@ class ArticleModel(db.Model):
             'category_id': self.category_id
         }
 
+    @classmethod
+    def find_by_title(cls, title):
+        return cls.query.filter_by(title=title).first()
+
+    @classmethod
+    def find_by_id(cls, _id):
+        return cls.query.filter_by(id=_id).first()
+
+    @classmethod
+    def find_all(cls):
+        return cls.query.all()
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete_from_db(self):
+        db.session.delete(self)
+        db.session.commit()
