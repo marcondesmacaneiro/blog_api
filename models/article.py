@@ -7,14 +7,16 @@ class ArticleModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80))
     slug = db.Column(db.String(30))
+    image_url = db.Column(db.String(500))
     description = db.Column(db.String(500))
 
     category_id = db.Column(db.Integer, db.ForeignKey('categorys.id'))
     category = db.relationship('CategoryModel')
 
-    def __init__(self, title, slug, description, category_id):
+    def __init__(self, title, slug, image_url, description, category_id):
         self.title = title
         self.slug = slug
+        self.image_url = image_url
         self.description = description
         self.category_id = category_id
 
@@ -23,6 +25,7 @@ class ArticleModel(db.Model):
             'id': self.id,
             'title': self.title,
             'slug': self.slug,
+            'image_url': self.image_url,
             'description': self.description,
             'category_id': self.category_id
         }

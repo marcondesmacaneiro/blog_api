@@ -16,7 +16,7 @@ class Article(Resource):
         _article_parser.add_argument('id',
                                      type=non_empty_string,
                                      required=True,
-                                     help="The title field is required!"
+                                     help="The id field is required!"
                                      )
         data = _article_parser.parse_args()
         article = ArticleModel.find_by_id(data['id'])
@@ -36,6 +36,11 @@ class Article(Resource):
                                      type=non_empty_string,
                                      required=True,
                                      help="The slug field is required!"
+                                     )
+        _article_parser.add_argument('image_url',
+                                     type=non_empty_string,
+                                     required=True,
+                                     help="The image_url field is required!"
                                      )
         _article_parser.add_argument('description',
                                      type=non_empty_string,
@@ -89,6 +94,11 @@ class UpdateArticle(Resource):
                                      required=False,
                                      help="The slug field is required!"
                                      )
+        _article_parser.add_argument('image_url',
+                                     type=non_empty_string,
+                                     required=True,
+                                     help="The image_url field is required!"
+                                     )
         _article_parser.add_argument('description',
                                      type=non_empty_string,
                                      required=False,
@@ -107,6 +117,7 @@ class UpdateArticle(Resource):
         else:
             article.title = data['title'] if data['title'] is not None else article.title
             article.slug = data['slug'] if data['slug'] is not None else article.slug
+            article.image_url = data['image_url'] if data['image_url'] is not None else article.image_url
             article.description = data['description'] if data['description'] is not None else article.description
             article.category_id = data['category_id'] if data['category_id'] is not None else article.category_id
 
